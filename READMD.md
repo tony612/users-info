@@ -7,6 +7,8 @@ I used devise to implement the user system.
 * I took advantage of devise's trackable function to track the user login count.
 * I added a column to track the total online time.I set the time when user visits the page, calculate and add the interval time to user's online time and update it.
 
+Maybe it is a better way to use faye to implement the online track function, but I'm unfamiliar with it, so I implement just using session.
+
 ## Stranger online info
 
 I just used js to update the time.
