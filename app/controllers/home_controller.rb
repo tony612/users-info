@@ -23,8 +23,8 @@ class HomeController < ApplicationController
       unless session[:online_user_id]
         session[:online_user_id] = current_user.id
         session[:online_user_time_begin] = Time.now
-        current_user.set_online(true)
       end
+      current_user.set_online(true)
     else
     end
   end
