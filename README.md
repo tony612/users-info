@@ -16,7 +16,7 @@ I just used js to update the time.
 ## Online users and strangers count
 
 * I added a column to track if the user is online.
-* I have not fount a good way to implement the online strangers count.
+* I used redis to track online strangers count.
 
 ## Use can login by username
 
