@@ -1,2 +1,11 @@
 <%= link_to 'Sign in', new_user_session_path %>
 <%= link_to 'Sign up', new_user_registration_path %>
+<% if signed_in? %>
+  <%= link_to 'Logout', destroy_user_session_path, method: :delete %>
+<% end %>
+
+<hr />
+
+<% if signed_in? %>
+  <%= "#{current_user.email}, thanks for you logging in our site. You have logged in #{current_user.sign_in_count} times." %>
+<% end %>
