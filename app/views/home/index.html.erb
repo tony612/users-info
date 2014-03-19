@@ -6,6 +6,14 @@
 
 <hr />
 
-<% if signed_in? %>
-  <%= "#{current_user.email}, thanks for you logging in our site. You have logged in #{current_user.sign_in_count} times." %>
-<% end %>
+<div>
+  <% if signed_in? %>
+    <%= "#{current_user.email}, thanks for you signing in our site. You have signed in #{current_user.sign_in_count} times." %>
+  <% else %>
+    Hi, stranger.You have not logged in, or you have not signed up.But you have browed this page for
+    <span id="stranger_time">
+      0
+    </span>
+    minutes.
+  <% end %>
+</div>
