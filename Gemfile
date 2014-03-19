@@ -30,6 +30,8 @@ gem 'jbuilder', '~> 1.2'
 
 gem 'devise'
 
+gem 'redis'
+
 group :development, :test do
   gem 'pry-rails'
   gem 'pry-debugger'

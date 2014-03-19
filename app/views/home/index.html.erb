@@ -8,7 +8,7 @@
 
 <div>
   <% if signed_in? %>
-    <%= "#{current_user.email}, thanks for you signing in our site. You have signed in #{current_user.sign_in_count} times.But your total online time is #{current_user.online_time.to_i}s" %>
+    <%= "#{current_user.email}, thanks for you signing in our site. You have signed in #{current_user.sign_in_count} times.And your total online time is #{current_user.online_time.to_i}s" %>
   <% else %>
     Hi, stranger.You have not logged in, or you have not signed up.But you have browed this page for
     <span id="stranger_time">
@@ -19,5 +19,14 @@
 </div>
 
 <div>
-  <%= "There're #{@online_users_count} users in all.There're m strangers in total." %>
+  <%= "There're #{@online_users_count} users in all.There're #{guest_count} strangers in total." %>
 </div>
+
+<script  type="text/javascript">
+  $(function() {
+    debugger;
+    $(window).bind('beforeunload', function(event) {
+      return $.post('/track_online_time');
+    });
+  });
+</script>

@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
-  after_action :index, :track_users
+  before_action :track_users, only: [:index]
   def index
     @online_users_count = User.online_users.count
   end
@@ -13,6 +13,7 @@ class HomeController < ApplicationController
       session[:online_user_time_begin] = Time.now
     end
     current_user.set_online(false) if current_user
+    change_guest_count(-1) unless signed_in?
     render nothing: true
   end
 
@@ -26,6 +27,13 @@ class HomeController < ApplicationController
       end
       current_user.set_online(true)
     else
+      change_guest_count(1)
     end
+  end
+
+  def change_guest_count(changed)
+    current_count = redis.get('guest_count') || 0
+    after_count = current_count.to_i + changed
+    redis.set('guest_count',  after_count)
   end
 end
