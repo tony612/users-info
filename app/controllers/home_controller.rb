@@ -7,8 +7,9 @@ class HomeController < ApplicationController
     if session[:online_user_time_begin]
       begin_time = session[:online_user_time_begin]
       interval = Time.now - begin_time
-      current_user.online_time += interval / 1000.0
+      current_user.online_time += interval
       current_user.save
+      session[:online_user_time_begin] = Time.now
     end
     render nothing: true
   end
