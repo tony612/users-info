@@ -12,10 +12,12 @@ class HomeController < ApplicationController
       current_user.save
       session[:online_user_time_begin] = Time.now
     end
-    # close a tab
-    session[:guest_tabs_count] -= 1 if guest_online?
-    # Delete guest_id session only when all tabs are closed
-    change_guest_count(-1) unless guest_online?
+    if guest_online?
+      # close a tab
+      session[:guest_tabs_count] -= 1
+      # Delete guest_id session only when all tabs are closed
+      change_guest_count(-1) unless guest_online?
+    end
     current_user.set_online(false) if current_user
     render nothing: true
   end
