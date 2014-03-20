@@ -35,6 +35,11 @@ gem 'redis'
 group :development, :test do
   gem 'pry-rails'
   gem 'pry-debugger'
+
+  gem 'rspec-rails', '~> 3.0.0.beta'
+  gem 'capybara', git: 'git@github.com:jnicklas/capybara.git'
+  # gem 'selenium-webdriver'
+  gem 'capybara-webkit'
 end
 
 group :doc do
