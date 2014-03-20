@@ -24,9 +24,14 @@
 
 <script  type="text/javascript">
   $(function() {
-    debugger;
     $(window).bind('beforeunload', function(event) {
-      return $.post('/track_online_time');
+      $.ajax({
+        type: 'POST',
+        async: false,
+        url: '/track_online_time'
+      });
+      request.abort();
+      return null;
     });
   });
 </script>
