@@ -10,11 +10,8 @@ class HomeController < ApplicationController
         # current_user.set_online(false)
         change_user_count(-1)
 
-        begin_time = session[:online_user_time_begin]
-        interval = Time.now - begin_time
-        current_user.online_time += interval
-        current_user.save
-        session.delete :online_user_time_begin
+        update_user_time
+        session[:online_user_time_begin] = Time.now
       end
     end
     if guest_online?
@@ -39,10 +36,12 @@ class HomeController < ApplicationController
   def track_login_user
     session[:user_tabs_count] = user_tabs_count + 1
     if user_tabs_count == 1
-      session[:online_user_time_begin] = Time.now
       # current_user.set_online(true)
       change_user_count(1)
+    else
+      update_user_time
     end
+    session[:online_user_time_begin] = Time.now
   end
 
   def track_guest
@@ -64,5 +63,12 @@ class HomeController < ApplicationController
 
   def change_user_count(changed)
     change_count('user', changed)
+  end
+
+  def update_user_time
+    begin_time = session[:online_user_time_begin]
+    interval = Time.now - begin_time
+    current_user.online_time += interval
+    current_user.save
   end
 end
