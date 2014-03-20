@@ -11,10 +11,9 @@
     <%= "#{current_user.email}, thanks for you signing in our site. You have signed in #{current_user.sign_in_count} times.And your total online time is #{current_user.online_time.to_i}s" %>
   <% else %>
     Hi, stranger.You have not logged in, or you have not signed up.But you have browed this page for
-    <span id="stranger_time">
-      0
+    <span id="stranger_time" data-seconds="0">
+      0s
     </span>
-    minutes.
   <% end %>
 </div>
 
