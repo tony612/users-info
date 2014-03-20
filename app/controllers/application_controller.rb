@@ -13,6 +13,11 @@ class ApplicationController < ActionController::Base
   end
   helper_method :guest_count
 
+  def user_count
+    redis.get('user_count') || 0
+  end
+  helper_method :user_count
+
   def guest_online?
     guest_tabs_count > 0
   end
@@ -22,6 +27,10 @@ class ApplicationController < ActionController::Base
   end
 
   def user_online?
-    !!session[:online_user_id]
+    user_tabs_count > 0
+  end
+
+  def user_tabs_count
+    session[:user_tabs_count] || 0
   end
 end

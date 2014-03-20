@@ -73,7 +73,6 @@ describe "home page", js: true do
         visit '/'
         expect(page).to have_content '1 users in all'
         expect(page).to have_content '1 strangers in total'
-        p User.all
 
         click_link 'Sign in'
         fill_in 'Email', with: 'test2@example.com'
@@ -103,6 +102,7 @@ describe "home page", js: true do
         expect(page).to have_content '0 strangers in total'
       end
 
+      # FIXME weird, the POST request is not sent
       in_browser(:two) { page.execute_script "window.close();" }
 
       in_browser(:one) do

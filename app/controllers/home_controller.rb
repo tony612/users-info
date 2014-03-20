@@ -1,16 +1,21 @@
 class HomeController < ApplicationController
   before_action :track_user, only: [:index]
   def index
-    @online_users_count = User.online_users.count
   end
 
   def track_online_time
-    if session[:online_user_time_begin]
-      begin_time = session[:online_user_time_begin]
-      interval = Time.now - begin_time
-      current_user.online_time += interval
-      current_user.save
-      session[:online_user_time_begin] = Time.now
+    if user_online?
+      session[:user_tabs_count] -= 1
+      unless user_online?
+        # current_user.set_online(false)
+        change_user_count(-1)
+
+        begin_time = session[:online_user_time_begin]
+        interval = Time.now - begin_time
+        current_user.online_time += interval
+        current_user.save
+        session.delete :online_user_time_begin
+      end
     end
     if guest_online?
       # close a tab
@@ -18,7 +23,6 @@ class HomeController < ApplicationController
       # Delete guest_id session only when all tabs are closed
       change_guest_count(-1) unless guest_online?
     end
-    current_user.set_online(false) if current_user
     render nothing: true
   end
 
@@ -26,16 +30,19 @@ class HomeController < ApplicationController
 
   def track_user
     if signed_in?
-      track_login_user unless user_online?
-      current_user.set_online(true)
+      track_login_user
     else
       track_guest
     end
   end
 
   def track_login_user
-    session[:online_user_id] = current_user.id
-    session[:online_user_time_begin] = Time.now
+    session[:user_tabs_count] = user_tabs_count + 1
+    if user_tabs_count == 1
+      session[:online_user_time_begin] = Time.now
+      # current_user.set_online(true)
+      change_user_count(1)
+    end
   end
 
   def track_guest
@@ -43,10 +50,19 @@ class HomeController < ApplicationController
     change_guest_count(1) if guest_tabs_count == 1
   end
 
-  def change_guest_count(changed)
-    current_count = redis.get('guest_count') || 0
+  def change_count(type, changed)
+    type = type.to_s
+    current_count = redis.get(type + '_count') || 0
     after_count = current_count.to_i + changed
     after_count = 0 if after_count < 0
-    redis.set('guest_count',  after_count)
+    redis.set(type + '_count',  after_count)
+  end
+
+  def change_guest_count(changed)
+    change_count('guest', changed)
+  end
+
+  def change_user_count(changed)
+    change_count('user', changed)
   end
 end
